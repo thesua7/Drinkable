@@ -64,6 +64,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainActivityContent(viewModel: SharedViewModel) {
     var showBottomSheet by remember { mutableStateOf(false) }
+
     val navController = rememberNavController()
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberStandardBottomSheetState(
@@ -83,6 +84,19 @@ fun MainActivityContent(viewModel: SharedViewModel) {
             }
         }
     } else {
+        ManageBottomSheetState(
+            showBottomSheet,
+            scaffoldState,
+            onBottomSheetHide = { showBottomSheet = false })
+
+
+
+        BackHandler {
+            if (scaffoldState.bottomSheetState.currentValue != SheetValue.Hidden) {
+                // If the bottom sheet is expanded, hide it
+                coroutineScope.launch { scaffoldState.bottomSheetState.hide() }
+            }
+        }
         // Main App Content with Scaffold
         BottomSheetScaffold(
             scaffoldState = scaffoldState,
@@ -107,12 +121,9 @@ fun MainActivityContent(viewModel: SharedViewModel) {
             ) { contentPadding ->
                 NavHost(
                     navController = navController,
-                    startDestination = "splash",
+                    startDestination = BottomNavItem.Home.route,
                     modifier = Modifier.padding(contentPadding)
                 ) {
-                    composable("splash") {
-                        // This should only be used temporarily; it's replaced by the full-screen splash
-                    }
                     composable(BottomNavItem.Home.route) {
                         PredictionScreen(viewModel)
                     }

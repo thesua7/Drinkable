@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,6 +29,7 @@ class SplashActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        enableEdgeToEdge()
         setContent {
             DrinkableTheme   {
                 SplashScreenWithLottie(){
@@ -36,11 +38,6 @@ class SplashActivity : ComponentActivity() {
             }
         }
 
-        // Navigate to MainActivity after a delay
-        CoroutineScope(Dispatchers.Main).launch {
-            delay(3000) // Wait for 3 seconds or the duration of your animation
-            navigateToMainActivity()
-        }
     }
 
     private fun navigateToMainActivity() {
@@ -50,7 +47,7 @@ class SplashActivity : ComponentActivity() {
 }
 @Composable
 fun SplashScreenWithLottie(onSplashFinished: () -> Unit) {
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.drink_water_lottie))
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.water_floating_lottie))
     val progress by animateLottieCompositionAsState(composition)
 
     // Navigate to next screen when animation ends

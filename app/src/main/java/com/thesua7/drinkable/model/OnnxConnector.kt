@@ -41,7 +41,7 @@ class OnnxConnector(context: Context, ) {
 
             if (resultValue is LongArray) {
                 val predictedClass = resultValue[0] // Get the first (and only) class index
-                val prediction = if (predictedClass == 1L) "Potable" else "Non-potable"
+                val prediction = if (predictedClass == 1L) "Drinkable." else "Not Drinkable"
                 Log.d("WaterPotabilityPredictor", "Prediction: $prediction")
 
                 prediction to 1.0f // Return a fixed probability of 1.0

@@ -38,6 +38,10 @@ class SharedViewModel @Inject constructor(
     }
 
     fun clear() {
+
+//        repository.clear()
         _uiState.value = PredictionUiState.Idle
+
+
     }
 }

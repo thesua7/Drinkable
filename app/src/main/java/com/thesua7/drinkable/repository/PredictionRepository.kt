@@ -13,4 +13,8 @@ class PredictionRepository @Inject constructor(
         return predictor.predictPotability(inputs)
     }
 
+    fun clear(){
+        predictor.close()
+    }
+
 }

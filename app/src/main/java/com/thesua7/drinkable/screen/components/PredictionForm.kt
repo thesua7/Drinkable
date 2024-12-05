@@ -25,7 +25,9 @@ fun PredictionForm(
     modifier: Modifier = Modifier, onPredict: (FloatArray) -> Unit
 ) {
 
+
     val inputFields = remember { mutableStateListOf("", "", "", "", "", "", "", "", "") }
+
     val inputLabels = listOf(
         "pH",
         "Hardness",
@@ -53,6 +55,8 @@ fun PredictionForm(
     val errors = remember {
         mutableStateListOf<String?>(null, null, null, null, null, null, null, null, null)
     }
+
+
 
     Column(
         modifier = modifier
@@ -106,6 +110,8 @@ fun PredictionForm(
 
                 if (inputs.all { it != null }) {
                     onPredict(inputs.filterNotNull().toFloatArray())
+                    inputFields.fill("")
+                    errors.fill(null)
                 }
             }, modifier = Modifier.fillMaxWidth()
         ) {

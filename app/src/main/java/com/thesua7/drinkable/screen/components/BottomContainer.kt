@@ -17,6 +17,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -26,12 +27,13 @@ fun BottomNavigationBar(navController: NavController) {
     val items = listOf(BottomNavItem.Home, BottomNavItem.About)
 
     Surface(
-        shape = RoundedCornerShape(30.dp),
+        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
         color = MaterialTheme.colorScheme.background,
         modifier = Modifier.fillMaxWidth()
     ) {
         NavigationBar(
-            containerColor = if (isSystemInDarkTheme()) Color.Black else Color.White
+            contentColor = MaterialTheme.colorScheme.onBackground,
+            containerColor = if (isSystemInDarkTheme()) Color.DarkGray else Color.LightGray
         ) {
             val currentDestination = navController.currentBackStackEntryAsState().value?.destination
             items.forEach { item ->
@@ -44,9 +46,8 @@ fun BottomNavigationBar(navController: NavController) {
                             transitionSpec = { fadeIn() togetherWith fadeOut() }, label = ""
                         ) { selected ->
                             Icon(
-                                imageVector = item.icon,
+                                painter = painterResource(item.iconRes),
                                 contentDescription = item.label,
-//                                tint = if (selected) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onBackground,
                                 modifier = Modifier.size(if (selected) 30.dp else 24.dp)
                             )
                         }
@@ -60,8 +61,9 @@ fun BottomNavigationBar(navController: NavController) {
                         }
                     },
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = MaterialTheme.colorScheme.onBackground,
-                        unselectedIconColor = MaterialTheme.colorScheme.onBackground
+                        selectedIconColor = MaterialTheme.colorScheme.background,
+                        indicatorColor = MaterialTheme.colorScheme.onBackground,
+                        unselectedIconColor = MaterialTheme.colorScheme.background
                     )
                 )
             }

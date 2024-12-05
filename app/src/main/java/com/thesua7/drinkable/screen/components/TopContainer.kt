@@ -47,17 +47,18 @@ fun TopBar(
         ) {
             Spacer(modifier = Modifier.width(30.dp))
 
-            Text(
-                text = "P R E D I C T I O N S",
-                textAlign = TextAlign.Center,
-                fontSize = 30.sp,
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier
-                    .padding(16.dp)
-                    .weight(1f)
-            )
 
             if (currentRoute == BottomNavItem.Home.route) {
+                Text(
+                    text = "P R E D I C T I O N S",
+                    textAlign = TextAlign.Center,
+                    fontSize = 30.sp,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .weight(1f)
+                )
+
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = "Add",

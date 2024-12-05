@@ -1,5 +1,6 @@
 package com.thesua7.drinkable.screen.components
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.thesua7.drinkable.R
 
 
 @Composable
@@ -39,7 +41,7 @@ fun BottomSheetContent(
 }
 
 
-sealed class BottomNavItem(val route: String, val label: String, val icon: ImageVector) {
-    data object Home : BottomNavItem("home", "home", Icons.Default.Home)
-    data object About : BottomNavItem("about", "about", Icons.Default.Build)
+sealed class BottomNavItem(val route: String, val label: String, @DrawableRes val iconRes: Int) {
+    data object Home : BottomNavItem("home", "home", R.drawable.water_drop_svg)
+    data object About : BottomNavItem("about", "about", R.drawable.about_svg)
 }
