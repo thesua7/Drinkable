@@ -1,4 +1,4 @@
-# Water Potability Prediction App  
+# Drinkable App  
 <img src="https://github.com/user-attachments/assets/52428aa9-3b8b-460a-b453-8c202ba8306f" alt="gif1" width="20%"/>  
 
 ---
