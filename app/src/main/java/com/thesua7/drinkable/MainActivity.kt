@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.thesua7.drinkable.screen.AboutScreen
 import com.thesua7.drinkable.screen.PredictionEvent
@@ -35,6 +36,7 @@ import com.thesua7.drinkable.screen.components.BottomNavigationBar
 import com.thesua7.drinkable.screen.components.BottomSheetContent
 import com.thesua7.drinkable.screen.components.TopBar
 import com.thesua7.drinkable.ui.theme.DrinkableTheme
+import com.thesua7.drinkable.ui.theme.SplashScreenWithLottie
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -69,45 +71,54 @@ fun MainActivityContent(viewModel: SharedViewModel) {
         )
     )
     val coroutineScope = rememberCoroutineScope()
-    ManageBottomSheetState(
-        showBottomSheet,
-        scaffoldState,
-        onBottomSheetHide = { showBottomSheet = false })
 
+    // Get the current route
+    val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
-
-    BackHandler {
-        if (scaffoldState.bottomSheetState.currentValue != SheetValue.Hidden) {
-            // If the bottom sheet is expanded, hide it
-            coroutineScope.launch { scaffoldState.bottomSheetState.hide() }
-        }
-    }
-
-    BottomSheetScaffold(
-        scaffoldState = scaffoldState, sheetContent = {
-            BottomSheetContent {
-                viewModel.onEvent(PredictionEvent.Predict(it))
-                showBottomSheet = false
-                coroutineScope.launch {
-                    scaffoldState.bottomSheetState.hide()
-                }
-
+    // Splash Screen as a Full-Screen Composable
+    if (currentRoute == "splash") {
+        SplashScreenWithLottie {
+            navController.navigate(BottomNavItem.Home.route) {
+                popUpTo("splash") { inclusive = true }
             }
-        }, sheetPeekHeight = 0.dp
-    ) {
-        Scaffold(topBar = {
-            TopBar(navController = navController, onAddClick = { showBottomSheet = true })
-        }, bottomBar = { BottomNavigationBar(navController) }) { contentPadding ->
-            NavHost(
-                navController = navController,
-                startDestination = BottomNavItem.Home.route,
-                modifier = Modifier.padding(contentPadding)
-            ) {
-                composable(BottomNavItem.Home.route) {
-                    PredictionScreen(viewModel)
+        }
+    } else {
+        // Main App Content with Scaffold
+        BottomSheetScaffold(
+            scaffoldState = scaffoldState,
+            sheetContent = {
+                BottomSheetContent {
+                    viewModel.onEvent(PredictionEvent.Predict(it))
+                    showBottomSheet = false
+                    coroutineScope.launch {
+                        scaffoldState.bottomSheetState.hide()
+                    }
                 }
-                composable(BottomNavItem.About.route) {
-                    AboutScreen()
+            },
+            sheetPeekHeight = 0.dp
+        ) {
+            Scaffold(
+                topBar = {
+                    TopBar(navController = navController, onAddClick = { showBottomSheet = true })
+                },
+                bottomBar = {
+                    BottomNavigationBar(navController)
+                }
+            ) { contentPadding ->
+                NavHost(
+                    navController = navController,
+                    startDestination = "splash",
+                    modifier = Modifier.padding(contentPadding)
+                ) {
+                    composable("splash") {
+                        // This should only be used temporarily; it's replaced by the full-screen splash
+                    }
+                    composable(BottomNavItem.Home.route) {
+                        PredictionScreen(viewModel)
+                    }
+                    composable(BottomNavItem.About.route) {
+                        AboutScreen()
+                    }
                 }
             }
         }
